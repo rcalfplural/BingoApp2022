@@ -8,7 +8,7 @@ public class Main {
 		System.out.println("Sand Pipers Bingo");
 		System.out.print("Numero de jogadores: ");
 		
-		Bingo jooj = new Bingo(scanner.nextInt(), JogoTiposEnum.CHEIA);
+		Bingo jooj = new Bingo(scanner.nextInt(), JogoTiposEnum.JANELA);
 		
 		
 		do {

@@ -69,12 +69,10 @@ public class Cartela {
 			
 			return false;
 		}
-		
-		if(tipoJogo == JogoTiposEnum.COLUNA) {
+		else if(tipoJogo == JogoTiposEnum.COLUNA) {
 			return colunaCompleta();
 		}
-		
-		if(tipoJogo == JogoTiposEnum.CHEIA) {
+		else if(tipoJogo == JogoTiposEnum.CHEIA) {
 			for(int i = 0; i < cartelaDados.length; i++) {
 				if(!linhaCompleta(cartelaDados[i])) {
 					return false;
@@ -82,6 +80,15 @@ public class Cartela {
 			}
 			
 			return true;
+		}
+		else if(tipoJogo == JogoTiposEnum.JANELA){
+			int[] colunaFirst = getColuna(0);
+			int[] colunaLast = getColuna(TAMANHO_CARTELA-1);
+			int[] linhaFirst = cartelaDados[0];
+			int[] linhaLast = cartelaDados[TAMANHO_CARTELA-1];
+			
+			return ( linhaCompleta(colunaFirst) && linhaCompleta(colunaLast) && linhaCompleta(linhaFirst) && linhaCompleta(linhaLast));
+			
 		}
 		
 		
@@ -100,6 +107,21 @@ public class Cartela {
 		return (acertosLinha == total);
 	}
 	
+	public int[] getColuna(int index) {
+		int[] coluna = new int[TAMANHO_CARTELA];
+		int indexArray = 0;
+		
+		for(int i = 0; i < cartelaDados.length; i++) {
+			for(int j = 0; j < cartelaDados[i].length; j++) {				
+				coluna[indexArray] = cartelaDados[j][index];
+			}
+			indexArray++;
+		}
+		
+		
+		return coluna;
+	}
+	
 	private boolean colunaCompleta() {
 		int[] coluna;
 		int arrayIndex = 0;
@@ -112,25 +134,15 @@ public class Cartela {
 				arrayIndex++;
 			}
 			
-			if(colunaCompleta(coluna)) {
+			if(linhaCompleta(coluna)) {
 				return true;
 			}
 			
 		}
 		
-		return true;
+		return false;
 	}
 	
-	
-	private boolean colunaCompleta(int[] coluna) {
-		for(int i = 0; i < coluna.length; i++) {
-			if(!ArrayUtils.includes(jogo.getGlobo().getNumerosSorteados(), coluna[i])) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
 	
 	@Override
 	public String toString() {
