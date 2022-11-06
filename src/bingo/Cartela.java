@@ -113,9 +113,11 @@ public class Cartela {
 		
 		for(int i = 0; i < cartelaDados.length; i++) {
 			for(int j = 0; j < cartelaDados[i].length; j++) {				
-				coluna[indexArray] = cartelaDados[j][index];
+				if(j == index) {					
+					coluna[indexArray] = cartelaDados[i][j];
+					indexArray++;
+				}
 			}
-			indexArray++;
 		}
 		
 		

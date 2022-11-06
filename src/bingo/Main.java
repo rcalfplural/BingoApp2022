@@ -19,6 +19,23 @@ public class Main {
 		System.out.println("Temos um vencedor: ");
 		System.out.println(jooj.temosVencedor());
 		
+		/* ZONA DE TESTES
+		Cartela c = new Cartela(jooj);
+		
+		
+		int[] col0 = c.getColuna(0);
+		int[] col2 = c.getColuna(4);
+		
+		System.out.println(c);
+		
+		for(int i:col0) {
+			System.out.println(i);
+		}
+		
+		for(int i:col2) {
+			System.out.println(i);
+		}
+		*/
 	}
 
 }
