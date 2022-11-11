@@ -11,11 +11,12 @@ public class Cartela {
 	private static Random random = new Random();
 	private static final int TAMANHO_CARTELA = 5;
 	private int acertos;
-	
+	private int porcentagemCompleta;
 	public Cartela(Bingo bingo) {
 		this.cartelaDados = new int[TAMANHO_CARTELA][TAMANHO_CARTELA];
 		this.acertos = 0;
 		this.jogo = bingo;
+		this.porcentagemCompleta = 0;
 		gerarCartela();
 	}
 
@@ -59,7 +60,57 @@ public class Cartela {
 		}
 	}
 	
+	private void calcularPorcentagemCompleta() {
+		JogoTiposEnum tipoJogo = jogo.getTipoJogo();
+		int acertos = 0, total = 0;
+		if(tipoJogo == JogoTiposEnum.LINHA) {
+			int maiorAcerto = 0;
+			total = TAMANHO_CARTELA;
+			for(int i = 0; i < TAMANHO_CARTELA; i++) {
+				int acerto = getAcertosDeLinha(cartelaDados[i]);
+				if(acerto > maiorAcerto)
+					maiorAcerto = acerto;
+			}
+			
+			acertos += maiorAcerto;
+		}
+		else if(tipoJogo == JogoTiposEnum.COLUNA) {
+			int maiorAcerto = 0;
+			total = TAMANHO_CARTELA;
+			for(int i = 0; i < TAMANHO_CARTELA; i++) {
+				int[] coluna = getColuna(i);
+				int acerto = getAcertosDeLinha(coluna);
+				
+				if(acerto > maiorAcerto)
+					maiorAcerto = acerto;
+			}
+			
+			acertos += maiorAcerto;
+		}
+		else if(tipoJogo == JogoTiposEnum.CHEIA) {
+			int acerto = 0;
+			total = TAMANHO_CARTELA * TAMANHO_CARTELA;
+			for(int i = 0; i < TAMANHO_CARTELA; i++) {
+				acerto += getAcertosDeLinha(cartelaDados[i]);
+			}
+			
+			acertos += acerto;
+		}
+		else if(tipoJogo == JogoTiposEnum.JANELA){
+			int[] colunaFirst = getColuna(0);
+			int[] colunaLast = getColuna(TAMANHO_CARTELA-1);
+			int[] linhaFirst = cartelaDados[0];
+			int[] linhaLast = cartelaDados[TAMANHO_CARTELA-1];
+			
+			acertos = getAcertosDeLinha(colunaFirst) + getAcertosDeLinha(colunaLast) + getAcertosDeLinha(linhaFirst) + getAcertosDeLinha(linhaLast);
+			total = colunaFirst.length + colunaLast.length + linhaFirst.length + linhaLast.length;
+		}
+		
+		this.porcentagemCompleta = (acertos*100)/total;
+	}
+	
 	public boolean checarVenceu(JogoTiposEnum tipoJogo) {
+		this.calcularPorcentagemCompleta();
 		if(tipoJogo == JogoTiposEnum.LINHA) {
 			for(int i = 0; i < cartelaDados.length; i++) {
 				if(linhaCompleta(cartelaDados[i])) {
@@ -95,8 +146,7 @@ public class Cartela {
 		return false;
 	}
 	
-	private boolean linhaCompleta(int[] linha) {
-		int total = linha.length;
+	private int getAcertosDeLinha(int[] linha) {		
 		int acertosLinha = 0;
 		for(int i = 0; i < linha.length; i++) {
 			if(ArrayUtils.includes(jogo.getGlobo().getNumerosSorteados(), linha[i])) {
@@ -104,8 +154,18 @@ public class Cartela {
 			}
 		}
 		
-		return (acertosLinha == total);
+		return acertosLinha;
+		
 	}
+	private boolean linhaCompleta(int[] linha) {
+		int total = linha.length;
+		return (getAcertosDeLinha(linha) == total);
+	}
+	
+	public int getPorcentagemCompleta(){
+		return porcentagemCompleta;
+	}
+	
 	
 	public int[] getColuna(int index) {
 		int[] coluna = new int[TAMANHO_CARTELA];

@@ -1,11 +1,16 @@
 package bingo;
 
+import java.io.IOException;
+
+import arquivos.ArquivosUtils;
+import utils.ArrayUtils;
+
 public class Bingo {
 	private Cartela[] cartelas;
 	private JogoTiposEnum tipoJogo;
 	private Globo globo;
 	
-	public Bingo(int nCartelas, JogoTiposEnum tipoJogo) {
+	public Bingo(int nCartelas, JogoTiposEnum tipoJogo) throws Exception {
 		this.tipoJogo = tipoJogo;
 		this.globo = new Globo();
 		this.cartelas = new Cartela[nCartelas];
@@ -13,9 +18,10 @@ public class Bingo {
 	}
 	
 	
-	private void inicializarCartelas() {
+	private void inicializarCartelas() throws IOException {
 		for(int i = 0; i < cartelas.length; i++) {
 			cartelas[i] = new Cartela(this);
+			ArquivosUtils.escreveArquivo("Cartella-"+(i+1)+".txt", cartelas[i].toString(), true);
 		}
 	}
 
