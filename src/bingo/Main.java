@@ -40,6 +40,7 @@ public class Main {
 				int quant = (numeroJogadores > 3)?3:1;
 				
 				for(int i = 0; i < quant; i++) {
+					if(jooj.getCartelas()[i].getPorcentagemCompleta() < 1) break;
 					System.out.println(jooj.getCartelas()[i]);
 				}
 			}while(jooj.temosVencedor() == null);
